@@ -123,12 +123,7 @@ weather() {
   curl -so ~/weather.xml http://w1.weather.gov/xml/current_obs/KRIC.xml
   if [[ -e ~/weather.xml ]]
   then
-    awk -F'</?temp_f>' 'NF>1 {
-      printf "%02.1f°F ", $2
-    }' ~/weather.xml
-    awk -F'</?weather>' 'NF>1 {
-      print tolower($2)
-    }' ~/weather.xml
+    xmllint ~/weather.xml --xpath 'concat(//temp_f, "°F ", //weather)'
     rm ~/weather.xml
   else
     printf "no weather"
